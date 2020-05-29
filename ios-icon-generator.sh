@@ -211,5 +211,23 @@ done
 
 info "Congratulation. All icons for iOS/macOS/watchOS APP are generate to the directory: $dst_path."
 
-IFS=$OLD_IFS
+sizes_mapper_android=`cat << EOF
+mipmap-hdpi     72
+EOF`
 
+mkdir $dst_path/android
+
+for line in $sizes_mapper_android
+do
+    name=`echo $line|awk '{print $1}'`
+    size=`echo $line|awk '{print $2}'`
+    info "Generate $name ..."
+    mkdir $dst_path/android/$name
+    if [ -f $srgb_profile ];then
+        sips --matchTo '/System/Library/ColorSync/Profiles/sRGB Profile.icc' -z $size $size $src_file --out $dst_path/android/$name/ic_launcher.png >/dev/null 2>&1
+    else
+        sips -z $size $size $src_file --out $dst_path/android/$name/ic_launcher.png >/dev/null
+    fi
+done
+
+IFS=$OLD_IFS
