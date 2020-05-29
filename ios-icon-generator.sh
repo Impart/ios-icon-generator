@@ -209,13 +209,13 @@ do
     fi
 done
 
-info "Congratulation. All icons for iOS/macOS/watchOS APP are generate to the directory: $dst_path."
-
 sizes_mapper_android=`cat << EOF
 mipmap-hdpi     72
 EOF`
 
 mkdir $dst_path/android
+
+info "Generating Android icons"
 
 for line in $sizes_mapper_android
 do
@@ -229,5 +229,7 @@ do
         sips -z $size $size $src_file --out $dst_path/android/$name/ic_launcher.png >/dev/null
     fi
 done
+
+info "Congratulation. All icons for iOS and Android are generated to the directory: $dst_path."
 
 IFS=$OLD_IFS
